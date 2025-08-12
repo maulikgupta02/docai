@@ -1,0 +1,6 @@
+[theme]
+base = "light"
+primaryColor = "slateBlue"
+backgroundColor = "#e9e9e7ff"          # off-white
+secondaryBackgroundColor = "#c2c2c2ff" # light gray
+baseRadius = 4

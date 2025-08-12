@@ -1,0 +1,13 @@
+# Ignore Python environment folders
+venv/
+env/
+
+# Ignore secrets file — DO NOT commit this!
+.streamlit/secrets.toml
+
+# Ignore Python cache
+__pycache__/
+*.py[cod]
+
+# Ignore other common files you don't want in repo
+.DS_Store
