@@ -17,10 +17,10 @@ st.markdown("""
     </h1>
             <style>
     .block-container {
-        padding-top: 40px;
-        padding-bottom: 40px;
-        padding-left: 150px;
-        padding-right: 150px;
+        padding-top: 3%;
+        padding-bottom: 5%;
+        padding-left: 10%;
+        padding-right: 10%;
     }
     </style>
 """, unsafe_allow_html=True)
