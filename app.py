@@ -12,16 +12,30 @@ st.set_page_config(
 )
 
 st.markdown("""
+    <style>
+    /* Hide Streamlit's default menu and header */
+    header, 
+    footer { 
+        visibility: hidden; 
+        height: 1; 
+        padding: 0; 
+        margin: 0; 
+    }
+    </style>
+""", unsafe_allow_html=True)
+
+st.markdown("""
     <h1 style='text-align: center; color: black; font-weight: bold;'>
         DocAI
     </h1>
     <style>
     .block-container {
-        padding-top: 5%;
+        padding-top: 3%;
         padding-bottom: 5%;
         padding-left: 10%;
         padding-right: 10%;
     }
+    
 
     </style>
 """, unsafe_allow_html=True)
