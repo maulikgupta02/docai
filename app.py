@@ -29,17 +29,27 @@ st.markdown("""
         color: var(--text-color); /* Theme-aware color */
         font-weight: bold;
     }
+            
+    @media (max-width: 640px) {
+        .stColumn > div {
+            margin-bottom: 0 !important;
+            padding-bottom: 0 !important;
+            padding-top: 0 !important;
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+        }
+    }
     </style>
 """, unsafe_allow_html=True)
 
 # Two columns for logo and title
-col1, col2 = st.columns([1, 4])  # 1:6 width ratio
+col1, col2 = st.columns([1, 8])  # 1:6 width ratio
 
 with col1:
     st.image("assets/logo.png", width=60)
 
 with col2:
-    st.markdown("<h1 style='margin-left:20%;'>Pocket Doctor</h1>", unsafe_allow_html=True)
+    st.markdown("<center><h1>Pocket Doctor</h1></center>", unsafe_allow_html=True)
 
 
 
