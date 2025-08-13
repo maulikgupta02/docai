@@ -3,8 +3,8 @@ from openai import OpenAI
 
 # --- PAGE SETUP ---
 st.set_page_config(
-    page_title="DocAI - Your AI Medical Assistant",
-    page_icon="🩺",
+    page_title="Pocket Doctor - Your AI Medical Assistant",
+    page_icon="./assets/logo.png",
     layout="wide",
     initial_sidebar_state="expanded",
     menu_items={
@@ -13,32 +13,33 @@ st.set_page_config(
 
 st.markdown("""
     <style>
-    /* Hide Streamlit's default menu and header */
-    header, 
-    footer { 
+    header, footer { 
         visibility: hidden; 
-        height: 1; 
+        height: 1px; 
         padding: 0; 
         margin: 0; 
     }
-    </style>
-""", unsafe_allow_html=True)
-
-st.markdown("""
-    <h1 style='text-align: center; color: black; font-weight: bold;'>
-        DocAI
-    </h1>
-    <style>
     .block-container {
         padding-top: 3%;
         padding-bottom: 5%;
         padding-left: 10%;
         padding-right: 10%;
     }
-    
-
+    h1 {
+        color: var(--text-color); /* Theme-aware color */
+        font-weight: bold;
+    }
     </style>
 """, unsafe_allow_html=True)
+
+# Two columns for logo and title
+col1, col2 = st.columns([1, 4])  # 1:6 width ratio
+
+with col1:
+    st.image("assets/logo.png", width=60)
+
+with col2:
+    st.markdown("<h1 style='margin-left:20%;'>Pocket Doctor</h1>", unsafe_allow_html=True)
 
 
 
@@ -83,39 +84,23 @@ def symptom_form():
     with st.form("patient_form", clear_on_submit=True):
         age = st.number_input("Age", min_value=1, max_value=120, step=1)
         gender = st.selectbox("Gender", ["Male", "Female", "Other"])
-        medical_history = st.text_area("Existing conditions", 
-                                       help="List any existing medical conditions or surgeries",
-                                       placeholder="e.g., diabetes, hypertension, previous surgeries",
-                                       height=10)
-        medications = st.text_area("Current medications",
-                                   help="List any medications you are currently taking",
-                                   placeholder="e.g., aspirin, metformin", 
-                                   height=10)
-        allergies = st.text_area("Allergies",
-                                 help="List any known allergies",
-                                 placeholder="e.g., penicillin, peanuts", 
-                                 height=10)
-        symptoms = st.text_area("Describe your symptoms",
-                                 help="Describe your current symptoms in detail",
-                                 placeholder="e.g., fever, cough, pain", 
-                                 height=10)
-
+        concerns = st.text_area("Describe your main health concerns", 
+                                       help="List down your main health concerns or issues along with your medical history in at least 10 words.",
+                                       placeholder="Here you can describe your main health concerns or issues along with your medical history, medications you are on, any allergies, and any other relevant information. The more details you provide, the better the Doctor can assist you.",
+                                       )
         submit = st.form_submit_button("Start Consultation")
         if submit:
-            if not age or age < 1 or age > 120:
-                st.error("❌ Please enter a valid age between 1 and 120.")
+            if not concerns.strip(): 
+                st.error("❌ Please enter your health concerns before starting your e-consultation.")
                 return
-            if not symptoms.strip(): 
-                st.error("❌ Please enter your symptoms before consultation.")
+            if len(concerns.strip().split()) < 10: 
+                st.error("❌ Please describe your health concerns in at least 10 words to ensure the doctor has enough information to assist you.")
                 return
             
             st.session_state['user_data'] = {
                 "age": age,
                 "gender": gender,
-                "medical_history": medical_history,
-                "medications": medications,
-                "allergies": allergies,
-                "symptoms": symptoms
+                "health_concerns": concerns,
             }
             st.session_state['consult_started'] = True
             st.session_state['chat_history'] = []
@@ -124,13 +109,11 @@ def symptom_form():
             initial_prompt = (f"""
                 You are a highly experienced medical doctor. The patient is\
                 {age} years old, {gender}\
-                Medical history: {medical_history}\
-                Current medications: {medications}\
-                Allergies: {allergies}\
-                Symptoms: {symptoms}\
-                Ask follow-up questions if needed, give a probable diagnosis, and detailed treatment advice
+                Medical history and Patient Concerns: {concerns}\
+                Ask follow-up questions if needed. Provide dianoses, potential causes, and recommendations for improvements.\
+                Do not bombard the patient with questions and excessive medical jargon.\
                 Always respond in a professional and empathetic manner.
-                Provide a summary of the patient's condition and recommended next steps.
+                Provide potential causes and recommendation for improvements.
                 If you need more information, ask the patient directly.
                 At no point should you say "I am not a doctor" or "I cannot provide medical advice.
                 The patient should not feel that he is talking to an AI to give him a sense of trust.
@@ -141,10 +124,7 @@ def symptom_form():
                 f"Patient Summary: \n"
                 f"- Age: {age} years\n"
                 f"- Gender: {gender}\n"
-                f"- Medical history: {medical_history if medical_history.strip() else 'None'}\n"
-                f"- Current medications: {medications if medications.strip() else 'None'}\n"
-                f"- Allergies: {allergies if allergies.strip() else 'None'}\n"
-                f"- Symptoms: {symptoms}"
+                f"- Health Concerns: {concerns}\n"
             )
 
             # st.session_state['chat_history'].append({"role": "user", "content": initial_prompt})
