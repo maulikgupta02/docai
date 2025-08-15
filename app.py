@@ -139,7 +139,7 @@ def symptom_form():
 
             # st.session_state['chat_history'].append({"role": "user", "content": initial_prompt})
             st.session_state['chat_history'].append({"role": "user", "content": patient_summary})
-            with st.spinner("Looking for the best doctor..."):
+            with st.spinner("Curating the best advice for your needs"):
                 # Get the first response from Gemini
                 bot_first_response = get_openai_response([{"role": "user", "content": initial_prompt}])
                 st.session_state['chat_history'].append({"role": "assistant", "content": bot_first_response})
